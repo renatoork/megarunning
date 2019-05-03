@@ -1,0 +1,17 @@
+{"nome" : "Corrida Noturna", "url" : "", "local" : "", "data" : "0001-01-01T00:00:00Z", "valor" : 0}
+
+{
+    "Nome": "Corrida Vespertina",
+    "Url": "http://www.teste.com",
+    "Local": "sdds",
+    "Data": "0001-01-01T00:00:00Z",
+    "Valor": 1500,
+  "Participantes": [
+    	{
+          "ValorPatrocinio": 700,
+          "Atleta": {
+            "Nome": {"Primeiro": "João", "NomedoMeio" : "Fernando", "Sobrenome" : "Barros"}
+          }
+        } 
+    ]
+ }

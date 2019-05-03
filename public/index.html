@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt" ng-app="megaRunningApp">
+<head>
+  <meta charset="utf-8">
+  <meta name="google-signin-clientid" content='1044380210135-h5v0ntqle19au35ief58g885tcj0k2rp.apps.googleusercontent.com' />
+  <meta name="google-signin-scope" content="https://www.googleapis.com/auth/userinfo.email" />
+  <meta name="google-signin-requestvisibleactions" content="http://schema.org/AddAction" />
+  <meta name="google-signin-cookiepolicy" content="single_host_origin" />
+  <meta name="google-signin-callback" content="signinCallback" />
+  <title>My HTML File</title>
+
+  <script src="js/vendor/angular.js"></script>
+  <script src="js/vendor/angular-route.js"></script>
+  <script src="js/vendor/angular-resource.js"></script>
+  <script src="js/app.js"> </script> 
+  <script src="js/resource/prova_svc.js"> </script> 
+  <script src="js/resource/provaCtrl.js"> </script>
+  <script src="js/routes.js"> </script>
+
+
+   <script>
+     var clientId = '1044380210135-h5v0ntqle19au35ief58g885tcj0k2rp.apps.googleusercontent.com';
+     var apiKey = 'AIzaSyDZh6P4T03PyjRy1j0TKtjjtBPM67HAIe4';
+     var scopes =  'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/plus.me';
+
+      function handleClientLoad() {
+        gapi.client.setApiKey(apiKey);
+        window.setTimeout(checkAuth,1);
+      }
+
+      function checkAuth() {
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: true}, handleAuthResult);
+        //gapi.auth.signIn() 
+      }
+
+
+      function handleAuthResult(authResult) {
+        var authorizeButton = document.getElementById('authorize-button');
+        if (authResult && !authResult.error) {
+          document.cookie="token=" + authResult.access_token
+          authorizeButton.style.visibility = 'hidden';
+          makeApiCall();
+        } else {
+          window.location.replace("/login")
+          authorizeButton.style.visibility = '';
+          authorizeButton.onclick = handleAuthClick;
+        }
+      }
+
+      function handleAuthClick(event) {
+        gapi.auth.authorize({client_id: clientId, scope: scopes, immediate: false}, handleAuthResult);
+        return false;
+      }
+
+      // Load the API and make an API call.  Display the results on the screen.
+      function makeApiCall() {
+        gapi.client.load('plus', 'v1', function() {
+          var request = gapi.client.plus.people.get({
+            'userId': 'me'
+          });
+          request.execute(function(resp) {
+            var heading = document.createElement('h4');
+            var image = document.createElement('img');
+            image.src = resp.image.url;
+            heading.appendChild(image);
+            heading.appendChild(document.createTextNode(resp.displayName));
+
+            document.getElementById('content').appendChild(heading);
+          });
+        });
+      }
+    </script>
+    <script src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+      
+</head>
+<body>
+
+<button id="authorize-button" style="visibility: hidden;">Authorize</button>
+  <div id="gSignInWrapper">
+    <div id="myButton" class="classesToStyleWith">
+      Sign in with Google
+    </div>
+  </div>
+  <div>
+    <a href='/#/provas'>teste</a>
+
+    <button id="authorize-button" onclick="render()">login</button>
+
+    <div id="content"></div>
+
+  	<div ng-view></div>
+  </div>
+</body>
+</html>
